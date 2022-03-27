@@ -1,3 +1,5 @@
+import { createArrayBindingPattern } from "typescript";
+
 /*
   В функцию personUpdate() приходят данные в виде объекта, содержащую некую информацию о человеке.
   Если этот человек является женщиной (свойство gender содержит значение 'female'), то из этого объекта
@@ -8,6 +10,14 @@
   Объект после манипуляций следует вернуть в качестве результата работы функции.
 */
 export function personUpdate(data) {
+    if ((data["gender"] == "female") && (data.hasOwnProperty("age") == true)) {
+        delete data.age;
+    } else {
+        if (data["gender"] == "male" && (data.hasOwnProperty("income") == false)) {
+            data.income = 100000;
+        }
+    }
+    return data;
 }
 
 /*
@@ -15,6 +25,13 @@ export function personUpdate(data) {
   Верните список названий этих полей в алфавитном порядке в виде массива строк.
 */
 export function objectFieldsList(obj1, obj2, obj3) {
+    let obj_all = {...obj1, ...obj2, ...obj3 };
+    let arr = [];
+    for (let key in obj_all) {
+        arr.push(key);
+    }
+    arr.sort();
+    return arr;
 }
 
 /*
@@ -23,4 +40,17 @@ export function objectFieldsList(obj1, obj2, obj3) {
   Количество клонов - count.
 */
 export function objectClone(obj, count) {
+    let arr = [];
+    for (let i = 0; i < count; i++) {
+        let clone = {...obj };
+        clone.id = i;
+        for (let key in obj) {
+            if (typeof(obj[key]) == "object") {
+                let clone1 = {...obj[key] };
+                clone[key] = clone1;
+            }
+        }
+        arr.push(clone);
+    }
+    return arr;
 }
